@@ -1,0 +1,16 @@
+---
+bsfl:
+  threads: 10
+  timeout: 600
+  mode: strict
+inventory:
+  - "192.168.2.156"
+  - "192.168.2.103"
+steps:
+  - rsync:
+      from: "LICENSE"
+      to: "/tmp/bsfl-LICENSE"
+  - ssh:
+      expected_exit: 0
+      execute: "sleep 2; uptime"
+      execute: "sleep 2; uptime"

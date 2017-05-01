@@ -1,0 +1,16 @@
+Rsync + chmod
+https://askubuntu.com/questions/32552/forceably-set-permissions-when-running-rsync
+
+pyyaml with native OrderedDict
+http://yaml.readthedocs.io/en/latest/overview.html
+
+plugins
+Use executable scripts as plugins...?
+http://yapsy.sourceforge.net/
+
+subprocess
+https://docs.python.org/3/library/subprocess.html
+http://www.pythonforbeginners.com/os/subprocess-for-system-administrators
+
+gevent ?
+http://www.gevent.org/

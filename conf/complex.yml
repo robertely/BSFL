@@ -1,0 +1,27 @@
+---
+bsfl:
+  threads: 10
+  mode: strict
+inventory:
+  - "192.168.2.156"
+  - "192.168.2.103"
+steps:
+  - local_exec:
+      allow_fail: false
+      timeout: 10 # Seconds
+      retries: 3
+
+      system_env: True
+      shell: true
+      exec: "ping %{bsfl_target_host} -n 1"
+  - local_exec:
+      "curl http://the_lb/take_me_out"
+  - rsync:
+      from: "LICENSE"
+      to: "/tmp/bsfl-LICENSE"
+  - ssh:
+      expected_exit: 0
+      execute: "sleep 2; uptime"
+      execute: "sleep 2; uptime"
+  - local_exec:
+    "curl http://the_lb/putmeinit"

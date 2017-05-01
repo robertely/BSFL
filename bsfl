@@ -1,0 +1,30 @@
+#!/usr/bin/python3
+
+import os, subprocess, yaml
+from pprint import pprint
+
+
+def loadconf(conf):
+    with open(conf, 'r') as stream:
+        try:
+            return yaml.load(stream)
+        except yaml.YAMLError as exc:
+            print(exc)
+            exit(2)
+
+globalconf = loadconf('conf/test1.yml')
+print('---conf')
+# pprint(globalconf)
+print('---')
+# pprint(target)
+
+# os.environ
+
+bsfl_envs={'bsfl_target_host': globalconf['inventory'][0]}
+
+with subprocess.Popen(['ssh $bsfl_target_host uptime; sleep 10;'],
+                      stdout=subprocess.PIPE,
+                      universal_newlines=True,
+                      shell=True,
+                      env={**bsfl_envs, **os.environ}) as proc:
+    print(proc.stdout.read())
