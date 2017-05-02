@@ -10,7 +10,6 @@ steps:
       allow_fail: false
       timeout: 10 # Seconds
       retries: 3
-
       system_env: True
       shell: true
       exec: "ping %{bsfl_target_host} -n 1"

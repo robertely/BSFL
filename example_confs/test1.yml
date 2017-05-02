@@ -1,0 +1,19 @@
+---
+bsfl:
+  threads: 10
+  timeout: 600
+  mode: strict
+inventory:
+  - "computer0001.company.com"
+  - "computer0002.company.com"
+steps:
+  - rsync:
+      from: "notepad.txt"
+      to: "/tmp/bsfl-LICENSE"
+  - ssh:
+      expected_exit: 0
+      execute: |
+        echo taco .3 | sed 's/taco \.[[:digit:]]/burrito "0/'|sed 's/\"/./g'
+        echo taco 1.; echo taco 2.; sleep 1
+        echo $bsfl_target_host - $LOGNAME
+        (>&2 echo "This is a multi\nline\nerror.")

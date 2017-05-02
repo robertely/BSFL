@@ -14,3 +14,9 @@ http://www.pythonforbeginners.com/os/subprocess-for-system-administrators
 
 gevent ?
 http://www.gevent.org/
+
+argparse:
+http://stackoverflow.com/questions/7576525/optional-stdin-in-python-with-argparse
+
+https://github.com/gizak/termui
+...I want it...
