@@ -11,7 +11,7 @@ bsflDescription = '''Big Stupid For Loop'''
 
 # Setup argparse
 parser = argparse.ArgumentParser(description=bsflDescription)
-parser.add_argument('configFile', metavar='/path/to/job.yaml', type=argparse.FileType('r'), help=bsflDescription)
+parser.add_argument('configFile', metavar='/path/to/job.yaml', type=argparse.FileType('r'), help="Path to job yaml file")
 parser.add_argument("-v", "--verbose", help="increase output verbosity", action="store_true")
 args = parser.parse_args()
 
