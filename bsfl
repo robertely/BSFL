@@ -1,31 +1,48 @@
 #!/usr/bin/env python3
+"""
+For simple orchestration of tasts across large enviroments.
+Specifically for wrapping rsync and ssh for massively parrell operation.
+"""
+
 import os
 import subprocess
 import argparse
 import logging
 from pprint import pprint
-
 import utils.conf as conf
 
-bsflDescription = '''Big Stupid For Loop'''
+class plugin_step(object):
+    """
+    Wrapper for shelling out to a step plugin
+    """
+    def __init__(self, name = '', path = '', prefix='bsfl_'):
+        self.step_full_path = step_path + step_prefix + step_name
+        self.status = 'Initialized'
+        self.stdout = []
+        self.stderr = []
+    def start(self, timeout = ''):
+        pass
+    def stop(self):
+        pass
 
-# Setup argparse
-parser = argparse.ArgumentParser(description=bsflDescription)
-parser.add_argument('configFile', metavar='/path/to/job.yaml', type=argparse.FileType('r'), help="Path to job yaml file")
-parser.add_argument("-v", "--verbose", help="increase output verbosity", action="store_true")
-args = parser.parse_args()
-
-# Setup logging
-# TODO: setup log formater
-if args.verbose:
-    logging.basicConfig(level=logging.DEBUG)
 
 if __name__ == '__main__':
+    # Setup argparse
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('configFile', metavar='/path/to/job.yaml', type=argparse.FileType('r'), help="Path to job yaml file")
+    parser.add_argument("-v", "--verbose", help="increase output verbosity", action="store_true")
+    args = parser.parse_args()
+
+    # Setup logging
+    # TODO: setup log formater
+    if args.verbose:
+        logging.basicConfig(level=logging.DEBUG)
+
     # Load workingConfig
     workingConfig = conf.parse(args.configFile)
     # Lint workingConfig
     conf.lint(workingConfig)
-    # pprint(workingConfig)
+    pprint(workingConfig)
 
     # Build Inventory
     workingInv = workingConfig['inventory']
