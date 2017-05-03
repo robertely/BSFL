@@ -19,6 +19,8 @@ steps:
       from: "LICENSE"
       to: "/tmp/bsfl-LICENSE"
   - ssh:
+      enviroment:
+        key: value
       expected_exit: 0
       execute: "sleep 2; uptime"
       execute: "sleep 2; uptime"

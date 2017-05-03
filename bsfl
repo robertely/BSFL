@@ -10,27 +10,57 @@ import argparse
 import logging
 from pprint import pprint
 import utils.conf as conf
+# flirps
+import time
+
 
 class plugin_step(object):
     """
     Wrapper for shelling out to a step plugin
     """
-    def __init__(self, name = '', path = '', prefix='bsfl_'):
-        self.step_full_path = step_path + step_prefix + step_name
+    password_req_prmt = 'password:'
+    sudo_req_prmt = '[sudo] password'
+
+    def __init__(self, name='', path='', prefix='bsfl_'):
+        self.step_full_path = path + prefix + name
         self.status = 'Initialized'
+        # TODO: Support option for binary logs
         self.stdout = []
         self.stderr = []
-    def start(self, timeout = ''):
-        pass
+        self.exit_code = None
+
+    def start(self):
+        self.status = 'Starting'
+        self.step_proc = subprocess.Popen(self.step_full_path,
+                                          shell=True,
+                                          bufsize=1,
+                                          universal_newlines=True,
+                                          stdout=subprocess.PIPE,
+                                          stderr=subprocess.PIPE)
+
     def stop(self):
-        pass
+        self.status = 'Stopping'
+        self.step_proc.terminate()
+
+    def std_buff_flush(self):
+        for line in self.step_proc.stdout:
+            print('got', line.rstrip("\n"))
+            self.stdout.append(line.rstrip("\n"))
+
+
+    def poll(self):
+        if self.step_proc.poll() is not None:
+            self.exit_code = self.step_proc.poll()
+            self.status = 'Stopped'
+        else:
+            self.status = 'Running'
 
 
 if __name__ == '__main__':
     # Setup argparse
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('configFile', metavar='/path/to/job.yaml', type=argparse.FileType('r'), help="Path to job yaml file")
-    parser.add_argument("-v", "--verbose", help="increase output verbosity", action="store_true")
+    parser.add_argument('configFile', metavar='/path/to/job.yaml', type=argparse.FileType('r'), help='Path to job yaml file')
+    parser.add_argument('-v', '--verbose', help='increase output verbosity', action='store_true')
     args = parser.parse_args()
 
     # Setup logging
@@ -42,7 +72,22 @@ if __name__ == '__main__':
     workingConfig = conf.parse(args.configFile)
     # Lint workingConfig
     conf.lint(workingConfig)
-    pprint(workingConfig)
 
-    # Build Inventory
-    workingInv = workingConfig['inventory']
+    # ---
+
+    x = plugin_step(name='beep', path='step_plugins/')
+
+    print('STARTING ---')
+    x.start()
+
+    print('flushing buffer ---')
+    x.std_buff_flush()
+
+    print('SLEEPING ---')
+    time.sleep(5)
+
+    print('flushing buffer ---')
+    x.std_buff_flush()
+
+    print('printing stdin')
+    pprint(x.stdout)
